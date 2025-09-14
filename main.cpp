@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "kmp.h"
+#include "include/kmp.h"
+#include "include/color.h"
 #include <chrono>
 #include <ctime>
 
@@ -24,6 +25,8 @@ int main(int argc, char* argv[]){
         getline(std::cin, filename);
     }
 
+    COLOR color("35", "0");
+
     pattern = argv[1];
     KMP kmp(pattern);
     auto pi_fill_start = std::chrono::system_clock::now();
@@ -32,7 +35,8 @@ int main(int argc, char* argv[]){
 
     std::chrono::duration<double> pi_fill_time = pi_fill_end - pi_fill_start;
     auto pi_fill_time_in_ms = std::chrono::duration_cast<std::chrono::milliseconds>(pi_fill_time);
-    std::cout << "Pi Table filled in " << pi_fill_time_in_ms.count() << " milliseconds" << endl;
+    std::cout << "Pi Table filled in " << pi_fill_time_in_ms.count() << " milliseconds" << std::endl;
+    std::cout << std::endl;
 
     ifstream myfile(filename);
     int i = 1;
@@ -40,15 +44,18 @@ int main(int argc, char* argv[]){
         string line;
         auto text_search_start = std::chrono::system_clock::now();
         while (getline(myfile, line)) {
-            // std::cout << line << "\n";
+            // std::cout << color.get_pretty_text(line) << "\n";
             int index = kmp.getIndex(line);
-            if(index!=-1) std::cout << "Pattern found at " << index << " at line " << i++ << ".\n";
+            if(index!=-1) {
+                std::cout << "Pattern found at " << index + 1 << " at line " << i++ << ".\n";
+                std::cout << line.substr(0, index) << color.get_pretty_text(pattern) << line.substr(index + pattern.size(), -1) << std::endl;
+            }
         }
         auto text_search_end = std::chrono::system_clock::now();
 
         std::chrono::duration<double> text_search_time = text_search_end - text_search_start;
         auto text_search_time_in_ms = std::chrono::duration_cast<std::chrono::milliseconds>(text_search_time);
-        std::cout << "Text search filled in " << text_search_time_in_ms.count() << " milliseconds" << endl;
+        std::cout << std::endl << "Text search completed in " << text_search_time_in_ms.count() << " milliseconds" << std::endl;
 
         myfile.close();
     } else {
