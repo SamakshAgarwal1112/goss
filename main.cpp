@@ -14,7 +14,7 @@ string pattern;
 int main(int argc, char* argv[]){
 
     if(argc > 3 || argc < 2) {
-        cout << "Expected 2 arguments, got " << argc - 1 << " arguments.\n";
+        cerr << "Error: Expected 2 arguments, got " << argc - 1 << " arguments.\n";
         return 0;
     }
     else if(argc == 3) {
@@ -47,7 +47,8 @@ int main(int argc, char* argv[]){
             // std::cout << color.get_pretty_text(line) << "\n";
             int index = kmp.getIndex(line);
             if(index!=-1) {
-                std::cout << "Pattern found at " << index + 1 << " at line " << i++ << ".\n";
+                std::cout << "Pattern found in line " << i++ << ".\n";
+                // std::cout << "Pattern found at " << index + 1 << " at line " << i++ << ".\n";
                 std::cout << line.substr(0, index) << color.get_pretty_text(pattern) << line.substr(index + pattern.size(), -1) << std::endl;
             }
         }
@@ -59,7 +60,7 @@ int main(int argc, char* argv[]){
 
         myfile.close();
     } else {
-        std::cout << "Unable to open file " << filename << ".\n";
+        std::cerr << "Unable to open file " << filename << ".\n";
     }
     return 0;
 }
