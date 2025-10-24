@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include "include/bm.h"
 #include "include/kmp.h"
 #include "include/color.h"
 #include <chrono>
@@ -28,9 +29,14 @@ int main(int argc, char* argv[]){
     COLOR color("35", "0");
 
     pattern = argv[1];
-    KMP kmp(pattern);
+    // KMP kmp(pattern);
+    // auto pi_fill_start = std::chrono::system_clock::now();
+    // kmp.fillPiTable();
+    // auto pi_fill_end = std::chrono::system_clock::now();
+
+    BM bm(pattern);
     auto pi_fill_start = std::chrono::system_clock::now();
-    kmp.fillPiTable();
+    bm.precompute();
     auto pi_fill_end = std::chrono::system_clock::now();
 
     std::chrono::duration<double> pi_fill_time = pi_fill_end - pi_fill_start;
@@ -45,11 +51,12 @@ int main(int argc, char* argv[]){
         auto text_search_start = std::chrono::system_clock::now();
         while (getline(myfile, line)) {
             // std::cout << color.get_pretty_text(line) << "\n";
-            int index = kmp.getIndex(line);
-            if(index!=-1) {
+            // int index = kmp.getIndex(line);
+            int index = bm.getIndex(line);
+            if(index != -1) {
                 // std::cout << "Pattern found in line " << i << ".\n";
                 std::cout << "Pattern found at index " << index + 1 << " in line " << i << ".\n";
-                std::cout << line.substr(0, index) << color.get_pretty_text(pattern) << line.substr(index + pattern.size(), -1) << std::endl;
+                std::cout << line.substr(0, index) << color.get_pretty_text(pattern) << line.substr(index + pattern.size()) << std::endl;
             }
             i++;
         }
