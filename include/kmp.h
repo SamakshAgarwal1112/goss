@@ -16,26 +16,25 @@ public:
     KMP(string patternText) {
         pattern = patternText;
         m = pattern.size();
-        piTable.resize(m+1, 0);
+        piTable.resize(m, 0);
     }
     void fillPiTable(){
-        pattern = ' ' + pattern;
-        int j = 0;
-        for(int i = 2 ; i <=m ; i++) {
-            while(j<=m && pattern[j+1] == pattern[i]) piTable[i++] = ++j;
-            j = 0;
+        for(int i = 1, j = 0 ; i < m ; i++) {
+            while(j > 0 && pattern[j] != pattern[i]) j = piTable[j-1];
+
+            if(pattern[i] == pattern[j]) j++;
+
+            piTable[i] = j;
         }
     }
     int getIndex(string text) {
-        int j = 0, n = text.size();
-        for(int i=0; i<n; i++){
-            if(pattern[j+1] != text[i]) {
-                while (j!=0 && pattern[j+1] != text[i]) {
-                    j = piTable[j];
-                }
-            }
-            j++;
-            if(j==m) return i - m + 1;
+        int n = text.size();
+        for(int i = 0, j = 0; i < n; i++){
+            while(j > 0 && text[i] != pattern[j]) j = piTable[j-1];
+
+            if(text[i] == pattern[j]) j++;
+
+            if(j == m) return i - m + 1;
         }
         return -1;
     }

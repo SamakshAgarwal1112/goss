@@ -47,8 +47,8 @@ int main(int argc, char* argv[]){
             // std::cout << color.get_pretty_text(line) << "\n";
             int index = kmp.getIndex(line);
             if(index!=-1) {
-                std::cout << "Pattern found in line " << i << ".\n";
-                // std::cout << "Pattern found at " << index + 1 << " at line " << i++ << ".\n";
+                // std::cout << "Pattern found in line " << i << ".\n";
+                std::cout << "Pattern found at index " << index + 1 << " in line " << i << ".\n";
                 std::cout << line.substr(0, index) << color.get_pretty_text(pattern) << line.substr(index + pattern.size(), -1) << std::endl;
             }
             i++;
