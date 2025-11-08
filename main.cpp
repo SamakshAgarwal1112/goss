@@ -14,6 +14,9 @@ string pattern;
 
 int main(int argc, char* argv[]){
 
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
     if(argc > 3 || argc < 2) {
         cerr << "Error: Expected 2 arguments, got " << argc - 1 << " arguments.\n";
         return 0;
